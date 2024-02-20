@@ -10,8 +10,12 @@ This is a Python application built using Tkinter that displays a baseball card f
 - Python 3.x
 - Tkinter library
 - PIL (Python Imaging Library)
+  > `pip install pillow`
 - requests library
+  > `pip install requests`
 - statsapi library
+  > `pip install statsapi`
+
 
 ## Usage
 1. Run the script.
