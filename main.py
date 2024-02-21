@@ -44,17 +44,6 @@ if response.status_code == 200:
     canvas.grid(column=0, row=0)
 
 # ---------------------------- BIO Labels ---------------------------- #
-# Get the default font information as a string
-default_font_str = window.option_get("font", "TkDefaultFont")
-
-# Split the string to extract font family and size, or provide default values
-default_font_family, default_font_size = default_font_str.split() if default_font_str else ("Arial", 10)
-
-# Print the default font family and font size
-print("Default Font Family:", default_font_family)
-print("Default Font Size:", default_font_size)
-
-
 player_name = stats["first_name"] + " " + stats["last_name"]
 player_name_lb = Label(text=player_name, bg=WHITE, fg=BLACK, font=NAME_FONT)
 player_name_lb.grid(column=1, row=0, columnspan=4, sticky='w')
