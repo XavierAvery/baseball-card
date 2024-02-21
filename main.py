@@ -5,16 +5,17 @@ import statsapi
 from io import BytesIO
 
 # ---------------------------- CONSTANTS ------------------------------- #
-# BASE_URL = "https://statsapi.mlb.com/api/"
+BASE_URL = "https://statsapi.mlb.com/api/"
 WHITE = "#ffffff"
 BLACK = "#000000"
 NAME_FONT = ("Arial", 17, "bold", "italic")
 LB_FONT = ("Arial", 13, "bold")
 
-# ------------ Player ID's ------------ #
+# ------------ Player Info ------------ #
 x_id = 542897
 acuna_id = 660670
 player_id = x_id
+PLAYER_URL = f"{BASE_URL}v1/people?personIds={player_id}"
 
 # Headshot --- change id for other players
 headshot_url = (f"https://img.mlbstatic.com/mlb-photos/image/upload/w_248,q_100/v1/people/{player_id}/"
@@ -22,12 +23,17 @@ headshot_url = (f"https://img.mlbstatic.com/mlb-photos/image/upload/w_248,q_100/
 response = requests.get(headshot_url)
 
 stats = statsapi.player_stat_data(personId=player_id, group='hitting', type="career")
-player_name = stats["first_name"] + " " + stats["last_name"]
+# player_name = stats["first_name"] + " " + stats["last_name"]  # One way to get player names
+
+player_name_response = requests.get(PLAYER_URL)
+player_name_data = player_name_response.json()
+# print(player_name_data["people"][0]["fullName"])
+player_name_endpoint = player_name_data["people"][0]["fullName"]
 # ---------------------------- FUNCTIONS ------------------------------- #
 
 # ---------------------------- UI SETUP ------------------------------- #
 window = Tk()
-window.title(f"{player_name}'s Baseball Card")
+window.title(f"{player_name_endpoint}'s Baseball Card")
 window.config(padx=20, pady=20, background=WHITE)
 
 # Create a Canvas widget
@@ -44,8 +50,8 @@ if response.status_code == 200:
     canvas.grid(column=0, row=0)
 
 # ---------------------------- BIO Labels ---------------------------- #
-player_name = stats["first_name"] + " " + stats["last_name"]
-player_name_lb = Label(text=player_name, bg=WHITE, fg=BLACK, font=NAME_FONT)
+# player_name = stats["first_name"] + " " + stats["last_name"]
+player_name_lb = Label(text=player_name_endpoint, bg=WHITE, fg=BLACK, font=NAME_FONT)
 player_name_lb.grid(column=1, row=0, columnspan=4, sticky='w')
 
 pos_lb = Label(text="POS", bg=WHITE, fg=BLACK, font=LB_FONT)
@@ -72,7 +78,7 @@ mlb_debut_day = stats["mlb_debut"]
 mlb_debut_day_lb = Label(text=mlb_debut_day, bg=WHITE, fg=BLACK)
 mlb_debut_day_lb.grid(column=16, row=0, columnspan=3, sticky='w')
 
-# ---------------------------- Career Labels ---------------------------- #
+# ---------------------------- Hitting Career Labels ---------------------------- #
 career_lb = Label(text="Career", bg=WHITE, fg=BLACK, font=LB_FONT)
 career_lb.grid(column=0, row=2, sticky='e')
 
